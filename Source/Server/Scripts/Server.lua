@@ -8,12 +8,9 @@ local remotes = replicatedStorage.Remotes
 
 local attack = remotes.Attack
 
-local hit = animations.Hit
-local children = hit:GetChildren()
-
 local modules = replicatedStorage.Modules
-
 local configuration = modules.Configuration
+
 local shared_configuration = require(configuration.Shared_Configuration)
 
 local server = shared_configuration.Server
