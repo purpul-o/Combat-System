@@ -3,14 +3,20 @@
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local players = game:GetService("Players")
 
+local visuals = replicatedStorage.Visuals
 local animations = replicatedStorage.Animations
 local remotes = replicatedStorage.Remotes
 
 local attack = remotes.Attack
 
-local modules = replicatedStorage.Modules
-local configuration = modules.Configuration
+local particles = visuals.Particles
 
+local modules = replicatedStorage.Modules
+
+local configuration = modules.Configuration
+local core = modules.Core
+
+local particles_module = require(core.Particles)
 local shared_configuration = require(configuration.Shared_Configuration)
 
 local server = shared_configuration.Server
@@ -27,31 +33,17 @@ attack.OnServerEvent:Connect(function(Player: Player, Characters: {Model}, Combo
 		local otherRootPart = Player.Character.HumanoidRootPart
 
 		local direction = (humanoidRootPart.Position - otherRootPart.Position).Unit
-		local impulse, died = server.ImpulseIntensity * 30, false
+		local impulse, container = server.ImpulseIntensity * 30, particles.Normal_Hit
 
 		humanoid.Health -= server.Damage
 
 		if humanoid.Health <= 0 then
-			died = true
 			impulse = server.ImpulseIntensity * 50
-		else
-			died = false
+			container = particles.Death_Hit
 		end
-
-		local folder = if died then humanoidRootPart.Death_Hit else humanoidRootPart.Normal_Hit
-
-		for _, Particle in ipairs(folder:GetChildren()) do
-			local emitDelay = Particle:GetAttribute("EmitDelay")
-			local emitCount = Particle:GetAttribute("EmitCount")
-			
-			Particle.Enabled = true
-
-			task.delay(emitDelay, function()
-				Particle:Emit(emitCount)
-				Particle.Enabled = false
-			end)
-		end
-
+		
+		particles_module.Emit(Character, container)
+		
 		humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, otherRootPart.Position)
 		humanoidRootPart:ApplyImpulse(direction * impulse)
 	end
