@@ -6,17 +6,17 @@ local debris = game:GetService("Debris")
 
 local player = players.LocalPlayer
 local character = player.Character
-local humanoidRootPart = character.HumanoidRootPart
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
 local modules = replicatedStorage.Modules
 
-local configuration = modules.Configuration
-local shared_configuration = require(configuration.Shared_Configuration)
+local configuration = modules:WaitForChild("Configuration")
+local shared_configuration = require(configuration:WaitForChild("Shared_Configuration"))
 
 local client = shared_configuration.Client
 
-local decay = workspace.DECAY
-local hitable = workspace.HITABLE
+local decay = workspace:WaitForChild("DECAY")
+local hitable = workspace:WaitForChild("HITABLE")
 
 local utility, main = {}, {}
 main.__index = main
