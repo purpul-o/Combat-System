@@ -1,7 +1,3 @@
-if game.Loaded == false then
-	game.Loaded:Wait()
-end
-
 --// Variables
 
 local replicatedStorage = game:GetService("ReplicatedStorage")
@@ -10,22 +6,22 @@ local players = game:GetService("Players")
 
 local player = players.LocalPlayer
 local character = script.Parent.Parent
-local humanoid = character.Humanoid
+local humanoid = character:WaitForChild("Humanoid")
 
 local client_modules = script.Modules
-local shared_modules = replicatedStorage.Modules
-
 local client_core = client_modules.Core
-local shared_core = shared_modules.Core
 
-local animator = require(shared_core.Animator)
-local utility = require(client_core.Utility)
+local shared_modules = replicatedStorage:WaitForChild("Modules")
+local shared_core = shared_modules:WaitForChild("Core")
 
-local remotes = replicatedStorage.Remotes
-local attack = remotes.Attack
+local animator = require(shared_core:WaitForChild("Animator"))
+local utility = require(client_core:WaitForChild("Utility"))
 
-local animations = replicatedStorage.Animations
-local hit = animations.Hit
+local remotes = replicatedStorage:WaitForChild("Remotes")
+local attack = remotes:WaitForChild("Attack")
+
+local animations = replicatedStorage:WaitForChild("Animations")
+local hit = animations:WaitForChild("Hit")
 
 local main = utility.New({Loaded = animator.Store(character, hit)})
 
