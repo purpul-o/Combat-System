@@ -18,12 +18,12 @@ local client = shared_configuration.Client
 local decay = workspace:WaitForChild("DECAY")
 local hitable = workspace:WaitForChild("HITABLE")
 
-local utility, main = {}, {}
+local main = {}
 main.__index = main
 
 --// Functions
 
-function utility.New(Data: {any})
+function main.New(Data: {any})
 	local self = setmetatable({
 		Count = 0,
 		Loaded = Data.Loaded,
@@ -73,4 +73,4 @@ function main:Run(Callback: (Combo: number) -> ())
 	self.Lock = false
 end
 
-return utility
+return main
